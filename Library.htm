@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Angular JS Assignment</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body ng-app="myApp">
+<div class="container" ng-controller="bookController">
+<h2>Library</h2>
+
+<div class="alert alert-default input-group search-box col-sm-5">
+<span class="input-group-btn">
+<input type="text" class="form-control" placeholder="Search in the Books Database..." ng-model="search_query">
+</span>
+</div>
+
+    <button  class="pull-right btn btn-primary" data-toggle="modal" data-target="#ModalForm">Add Book <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+
+<b class ="bookHead">Books Database</b>
+
+<table class="table table-hover table-striped" >
+<thead>
+<tr>
+<th>ISBN</th>
+<th>Title</th>
+<th>Author</th>
+<th>Genre</th>
+<th>Publisher</th>
+<th>Date Published</th>
+<th colspan=2>Borrowers</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="detail in book |filter:search_query">
+<td>{{detail.isbn}}</td>
+<td>{{detail.title}}</td>
+<td>{{detail.author}}</td>
+<td>{{detail.genre}}</td>
+<td>{{detail.publisher}}</td>
+<td>{{detail.published}}</td>
+<td><a ng-click="showBorrowers=!showBorrowers"><span class="glyphicon glyphicon-open"></span></a>
+<td> <ul ng-show="showBorrowers">
+<li ng-repeat="people in detail.borrower">
+{{ people.borrowDate + ' - ' + people.name }}
+</li>
+</ul>
+<form class="form-horizontal alert alert-warning" name="borrowersList" id="borrowersList" ng-submit="addBorrowers(borrowerInfo);" >
+
+					<div class="form-group">
+						<label for="name">Name:</label>
+						<div class=custom-error ng-show="borrowersList.name.$error.required">**</div>
+						<input type="text" name="name" class="form-control" placeholder="Enter your name" ng-pattern="/[A-Z][a-z]+( [A-Z][a-z]+)*/" ng-model="borrowerInfo.name"  required>
+		                   <div class="custom-error" ng-show="borrowersList.name.$error.pattern">Book borrower must start with a capital letter and contain only letters.
+                           </div>
+					</div>
+						   
+					<div class="form-group">
+						<label for="dateBorrowed">Borrow Date:</label>
+						<div class=custom-error ng-show="borrowersList.dateBorrowed.$error.required">**</div>
+						<input type="text" name="dateBorrowed" class="getdate form-control" placeholder="Enter Borrow Date" ng-model="borrowerInfo.borrowDate" required>
+		                   <div class="custom-error" ng-show="borrowersList.dateBorrowed.$error.pattern">Error message!
+                           </div>
+					</div>
+					<div class="form-group text-center">
+						<button class="btn btn-warning" id="submitted" ng-disabled="borrowersList.$invalid">Add Into Database</button>
+					</div>
+</form>
+</td>
+</td>
+</tr>
+</tbody>
+</table>
+
+
+<div class="modal fade" id="ModalForm"  role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+                <h1 class="modal-title">Add Book</h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal alert alert-warning" name="bookList" id="bookList" ng-submit="insertInfo(bookInfo);" >
+
+					<div class="form-group">
+						<label for="isbn">ISBN:</label>
+						<div class=custom-error ng-show="bookList.isbn.$error.required">**</div>
+						<input type="text" name="isbn" class="form-control" placeholder="Enter Book ISBN" ng-model="bookInfo.isbn" ng-pattern="/[0-9]{1,3}/" autofocus required>
+		                   <div class="custom-error" ng-show="bookList.isbn.$error.pattern">Book ISBN must be numeric.
+                          </div>
+					</div>
+					<div class="form-group">
+						<label for="title">Title:</label>
+						<div class=custom-error ng-show="bookList.title.$error.required">**</div>
+						<input type="text" name="title" class="form-control" placeholder="Enter Book Title" ng-pattern="/[A-Z][a-z]+( [A-Z][a-z]+)*/" ng-model="bookInfo.title"  required>
+		                   <div class="custom-error" ng-show="bookList.title.$error.pattern">Book title must start with a capital letter and contain only letters.
+                           </div>
+					</div>
+
+					<div class="form-group">
+						<label for="author">Author:</label>
+						<div class=custom-error ng-show="bookList.author.$error.required">**</div>
+						<input type="text" name="author" class="form-control" placeholder="Enter Book Author" ng-pattern="/[A-Z][a-z]+( [A-Z][a-z]+)*/" ng-model="bookInfo.author"  required>
+		                   <div class="custom-error" ng-show="bookList.author.$error.pattern">Book author must start with a capital letter and contain only letters.
+                           </div>
+					</div>
+					<div class="form-group">
+						<label for="genre">Genre:</label>
+						<div class=custom-error ng-show="bookList.genre.$error.required">**</div>
+						<input type="text" name="genre" class="form-control" placeholder="Enter Book Genre" ng-model="bookInfo.genre" ng-pattern="/[A-Z][a-z ]{3,}/" required>
+		                   <div class="custom-error" ng-show="bookList.genre.$error.pattern">Book genre must start with a capital letter and contain only letters.
+                           </div>
+					</div>
+					
+					<div class="form-group">
+						<label for="publisher">Publisher:</label>
+						<div class=custom-error ng-show="bookList.publisher.$error.required">**</div>
+						<input type="text" name="publisher" class="form-control" placeholder="Enter Book Publisher" ng-pattern="/[A-Z][a-z]+( [A-Z][a-z]+)*/" ng-model="bookInfo.publisher"  required>
+		                   <div class="custom-error" ng-show="bookList.publisher.$error.pattern">Book publisher must start with a capital letter and contain only letters.
+                           </div>
+						   </div>
+						   
+					<div class="form-group">
+						<label for="published">Year Published:</label>
+						<div class=custom-error ng-show="bookList.published.$error.required">**</div>
+						<input type="text" name="published" class="form-control" placeholder="Enter Year Published" maxlength="4" ng-model="bookInfo.published" pattern="\d{4}"  required>
+		                   <div class="custom-error" ng-show="bookList.published.$error.pattern">Year Published must be 4 digit number.
+                           </div>
+					</div>
+					 <input type="hidden" ng-init = "bookInfo.borrower=[]">
+					<div class="form-group text-center">
+						<button class="btn btn-warning" ng-disabled="bookList.$invalid">Add Into Database</button>
+					</div>
+</form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+</div>
+
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/myJSON.js"></script>
+
+<script>
+$(document).ready(function(){
+    $(".getdate").each(function() {
+        $(this).datepicker({
+		dateFormat: "dd.mm.yy"
+		});
+		
+    });
+	
+	$("#submitted").on("click", function() {
+	alert("Borrower submitted!");
+	});
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+.bookHead {
+  font-size:150%;
+}
+table {
+  margin-top:1em;
+  border:solid black .02em;
+}
+table thead{
+  background-color:#006172;
+  color:white;
+  text-transform:uppercase;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color:#e3fcd6;
+}
+
